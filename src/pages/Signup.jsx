@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { createUser } from '../appwrite/auth'
+import { createUser, loginUser } from '../appwrite/auth'
 import FormLayout from '../components/FormLayout'
 import InputBox from '../components/InputBox'
 import Button from '../components/Button'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { currentUser, login } from '../redux/authSlice'
 
 function Signup() {
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
     const { register,
         formState: { errors },
         handleSubmit,
@@ -28,6 +33,12 @@ function Signup() {
                 setSuccess("User Created successfully!!")
                 setError("")
                 reset();
+                const userlogin=await loginUser(data.email,data.password)
+                dispatch(login(userlogin))
+                dispatch(currentUser(user))
+                setTimeout(() => {
+                    navigate('/')
+                }, 500);
             }
             else {
                 setError("User already exists!!")

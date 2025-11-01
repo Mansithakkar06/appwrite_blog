@@ -1,31 +1,34 @@
-import React, { use, useState } from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import FormLayout from '../components/FormLayout'
 import InputBox from '../components/InputBox'
 import Button from '../components/Button'
-import { getCurrentUser, loginUser } from '../appwrite/auth'
+import { loginUser } from '../appwrite/auth'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import { currentUser, login } from '../redux/authSlice'
+import { useDispatch } from 'react-redux'
+import { getCurrentUser } from "../appwrite/auth";
+
 
 function Login() {
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
-    const {setSession,setUser}=useAuth()
+    const navigate=useNavigate()
+    const dispatch =useDispatch()
     const { register,
         handleSubmit,
         reset,
         formState: { errors }
     } = useForm()
-    const navigate=useNavigate()
 
     const submitHandle=async(data)=>{
         const user=await loginUser(data.email,data.password)
         if(user){
-            const currentuser=getCurrentUser()
-            setUser(currentuser)
-            const sessionid=user.$id
-            setSession(sessionid)
+            const currentuser=await getCurrentUser()
+            dispatch(login(user))
+            dispatch(currentUser(currentuser))
             setSuccess("Loggedin successfully!!")
+            setError("")
             reset()
             setTimeout(() => {
                 navigate('/')

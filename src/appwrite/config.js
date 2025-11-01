@@ -1,10 +1,11 @@
 import { Client, Account, Databases, Storage} from 'appwrite';
+import config from './envconfig';
 
 export const client = new Client();
 
 client
-    .setEndpoint('https://fra.cloud.appwrite.io/v1')
-    .setProject('69048c6c00370bd2dc8c');
+    .setEndpoint(config.appwriteEndPoint)
+    .setProject(config.appwriteProjectId);
 
 export const account = new Account(client);
 export const database=new Databases(client)

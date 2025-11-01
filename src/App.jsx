@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import Signup from './pages/Signup'
 import NotFound from './pages/NotFound'
 import Post from './pages/Post'
+import AuthLayout from './components/AuthLayout'
 
 function App() {
 
@@ -19,7 +20,10 @@ function App() {
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route path='/' element={<Home/>}/>
-          <Route path='/add-post' element={<AddPost/>} />
+          <Route path='/add-post' element=
+          {<AuthLayout>
+            <AddPost/>
+          </AuthLayout>} />
           <Route path='login' element={<Login/>} />
           <Route path='signup' element={<Signup/>} />
           <Route path='post/:id' element={<Post/>} />

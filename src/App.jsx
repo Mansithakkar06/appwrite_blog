@@ -11,27 +11,39 @@ import Signup from './pages/Signup'
 import NotFound from './pages/NotFound'
 import Post from './pages/Post'
 import AuthLayout from './components/AuthLayout'
+import MyPosts from './pages/MyPosts'
+import EditPost from './pages/EditPost'
 
 function App() {
 
   return (
     <>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Layout/>}>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/add-post' element=
-          {<AuthLayout>
-            <AddPost/>
-          </AuthLayout>} />
-          <Route path='login' element={<Login/>} />
-          <Route path='signup' element={<Signup/>} />
-          <Route path='post/:id' element={<Post/>} />
-          <Route path='*' element={<NotFound/>}/>
-        </Route>
-      </Routes>
-    </BrowserRouter>
-      
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Layout />}>
+            <Route path='/' element={<Home />} />
+            <Route path='/add-post' element=
+              {<AuthLayout>
+                <AddPost />
+              </AuthLayout>} />
+            <Route path='login' element={<Login />} />
+            <Route path='signup' element={<Signup />} />
+            <Route path='post/:id' element={<Post />} />
+            <Route path='edit/:id' element={
+              <AuthLayout>
+                <EditPost />
+              </AuthLayout>
+            } />
+            <Route path='my-posts' element={
+              <AuthLayout>
+                <MyPosts/>
+              </AuthLayout>
+            }/>
+            <Route path='*' element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+
     </>
   )
 }

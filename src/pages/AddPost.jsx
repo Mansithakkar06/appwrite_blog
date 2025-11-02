@@ -5,7 +5,6 @@ import InputBox from '../components/InputBox'
 import Button from '../components/Button'
 import Textarea from '../components/Textarea'
 import SelectBox from '../components/SelectBox'
-import { retry } from '@reduxjs/toolkit/query'
 import { createFile, createPost } from '../appwrite/post'
 import { useDispatch, useSelector } from 'react-redux'
 import { addpost } from '../redux/postSlice'
@@ -43,7 +42,7 @@ function AddPost() {
   const submitHandle = async(data) => {
     const image=data.image[0]?await createFile(data.image[0]):null;
     if(image){
-      const post=await createPost(data.title,data.slug,data.description,data.status,image.$id,user.$id)
+      const post=await createPost(data.title,data.slug,data.description,data.status,image.$id,user.$id,user.name)
       if(post)
       {
         dispatch(addpost(post))
@@ -97,10 +96,10 @@ function AddPost() {
             id="image"
             type='file'
             register={register}
-            validation={{ required: "Image is required" }}
             placeholder='Enter Image URL'
             error={errors.slug}
           />
+          
 
           <SelectBox
             label="Status"

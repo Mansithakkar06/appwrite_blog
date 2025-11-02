@@ -9,7 +9,7 @@ const combined = combineReducers({
   post: postReducer,
 })
 const persistConfig = {
-  key: "activeUser",
+  key: "blog",
   storage,
   whitelist:["auth","post"]
 }

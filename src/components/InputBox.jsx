@@ -1,6 +1,6 @@
 import React from 'react'
 
-function InputBox({ id, label, type = "text",register,validation,error,placeholder="",className="",props }) {
+function InputBox({ id, label, type = "text",register,validation="",error,placeholder="",className="",props }) {
 
     return (
         <div>

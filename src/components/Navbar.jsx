@@ -43,7 +43,9 @@ function Navbar() {
                         </li>
                         </>:
                         <>
-                        
+                        <li className='px-3 hover:text-purple-600'>
+                            <NavLink to="/my-posts">My Posts</NavLink>
+                        </li>
                         <li className='px-3 hover:text-purple-600'>
                             <form onSubmit={handleLogout}>
                                 <button>Logout</button>

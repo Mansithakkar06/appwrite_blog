@@ -27,6 +27,34 @@ export const getDocument=async(id)=>{
     })
     return post;
 }
+
+export const updateDocument=async(id,title,slug,description,status,image,userid,username)=>{
+    const post=await database.updateDocument({
+        databaseId:config.appwriteDatabaseId,
+        collectionId:config.appwriteCollectionId,
+        documentId:id,
+        data:{
+            title:title,
+            slug:slug,
+            description:description,
+            status:status,
+            image:image,
+            userid:userid,
+            username:username
+        }
+    })
+    return post
+}
+
+export const deleteDocument=async(id)=>{
+    const post=await database.deleteDocument({
+        databaseId:config.appwriteDatabaseId,
+        collectionId:config.appwriteCollectionId,
+        documentId:id
+    })
+    return post;
+}
+
 export const createFile=async(image)=>{
     const file=await storage.createFile({
         bucketId:config.appwriteBucketId,

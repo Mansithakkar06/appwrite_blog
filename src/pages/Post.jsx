@@ -1,15 +1,23 @@
 import React, {  useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getDocument, getFileview } from '../appwrite/post';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { deleteDocument, getDocument, getFileview } from '../appwrite/post';
+import { useDispatch, useSelector } from 'react-redux';
+import { deletepost } from '../redux/postSlice';
 
 function Post() {
   const { id } = useParams("id");
   const [post, setPost] = useState("");
   const user=useSelector(state=>state.auth.user)
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
 
-  const handleDelete=()=>{
-
+  const handleDelete=async(id)=>{
+    if(id){
+      const deletedpost=await deleteDocument(id)
+      console.log(deletedpost)
+      dispatch(deletepost(id))
+      navigate('/')
+    }
   }
   useEffect(() => {
     const getpost = async () => {

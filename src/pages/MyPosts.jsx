@@ -10,7 +10,7 @@ function MyPosts() {
         post.userid===user.$id
     ))
     return (
-        <div className='p-3'>
+        <div className='p-3 flex'>
             {
                 myposts.map((post)=>(
                     <div key={post.$id}>

@@ -5,19 +5,20 @@ import InputBox from '../components/InputBox'
 import Button from '../components/Button'
 import Textarea from '../components/Textarea'
 import SelectBox from '../components/SelectBox'
-import { createFile, createPost, getFileview } from '../appwrite/post'
+import { createFile, createPost, getFileview, updateDocument } from '../appwrite/post'
 import { useDispatch, useSelector } from 'react-redux'
-import { addpost } from '../redux/postSlice'
+import { addpost, updatepost } from '../redux/postSlice'
 import { useNavigate, useParams } from 'react-router-dom'
 
 function EditPost() {
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
-  const user=useSelector(state=>state.auth.user)
-  const posts=useSelector(state=>state.post.posts)
-  const dispatch=useDispatch()
-  const navigate=useNavigate()
-  const {id}=useParams("id")
+  const [image, setImage] = useState("")
+  const user = useSelector(state => state.auth.user)
+  const posts = useSelector(state => state.post.posts)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { id } = useParams("id")
   const { register,
     handleSubmit,
     formState: { errors },
@@ -34,35 +35,36 @@ function EditPost() {
       .replace(/[^a-z0-9\s-]/g, "")
       .replace(/\s+/g, "_");
   }
-  const post=posts.filter((post)=>(
-    post.$id===id
+  const post = posts.filter((post) => (
+    post.$id === id
   ))
- 
 
-  const submitHandle = async(data) => {
-    if(data.image){
-      const image=data.image[0]?await createFile(data.image[0]):null;
+  const submitHandle = async (data) => {
+    let image=post[0].image;
+    if (data.image.length !== 0) {
+      const file = await createFile(data.image[0]);
+      image=file.$id
     }
-    if(image){
-      const post=await createPost(data.title,data.slug,data.description,data.status,image.$id,user.$id,user.name)
-      if(post)
-      {
-        dispatch(addpost(post))
+
+    if (image) {
+      const addpost = await updateDocument(post[0].$id, data.title, data.slug, data.description, data.status, image, user.$id, user.name)
+      if (addpost) {
+        dispatch(updatepost(addpost))
+        setSuccess("post updated successfully!!")
+        setError("")
+        reset()
         setTimeout(() => {
           navigate("/")
         }, 500);
-        setSuccess("post added successfully!!")
-        setError("")
-        reset()
       }
-      else{
+      else {
         setError("something went wrong!!")
         setSuccess("")
       }
     }
-    
+
   }
-   useEffect(() => {
+  useEffect(() => {
     if (title) {
       const slug = createSlug(title)
       setValue("slug", slug)
@@ -70,74 +72,79 @@ function EditPost() {
   }, [title, setValue]);
 
   useEffect(() => {
-    if(post[0]){
-      setValue("title",post[0].title)
-      setValue("slug",post[0].slug)
-      setValue("description",post[0].description)
-      setValue("status",post[0].status)
-      setValue("image",post[0].image)
-    }
+    if (post[0]) {
+      reset({
+      "title": post[0].title,
+      "slug": post[0].slug,
+      "description": post[0].description,
+      "status":post[0].status
+    })
+
+}
   }, []);
-  return (
-    <div className='w-xl m-auto'>
-      <FormLayout title="Edit Post" error={error} success={success} >
-        <form onSubmit={handleSubmit(submitHandle)}>
+useEffect(() => {
+  console.log(image)
+}, [image]);
+return (
+  <div className='w-xl m-auto'>
+    <FormLayout title="Edit Post" error={error} success={success} >
+      <form onSubmit={handleSubmit(submitHandle)}>
 
-          <InputBox
-            label="Title"
-            id="title"
-            register={register}
-            validation={{ required: "Title is required" }}
-            placeholder='Enter Post Title'
-            error={errors.title}
-          />
+        <InputBox
+          label="Title"
+          id="title"
+          register={register}
+          validation={{ required: "Title is required" }}
+          placeholder='Enter Post Title'
+          error={errors.title}
+        />
 
-          <InputBox
-            label="Slug"
-            id="slug"
-            register={register}
-            validation={{ required: "Slug is required" }}
-            placeholder='Enter Post Slug'
-            error={errors.slug}
-          />
+        <InputBox
+          label="Slug"
+          id="slug"
+          register={register}
+          validation={{ required: "Slug is required" }}
+          placeholder='Enter Post Slug'
+          error={errors.slug}
+        />
 
-          <Textarea
-            label="Description"
-            id="description"
-            register={register}
-            validation={{ required: "Description is required" }}
-            placeholder="Enter Post Description"
-            error={errors.description}
-          />
+        <Textarea
+          label="Description"
+          id="description"
+          register={register}
+          validation={{ required: "Description is required" }}
+          placeholder="Enter Post Description"
+          error={errors.description}
+        />
 
-          <InputBox
-            label="Image"
-            id="image"
-            type='file'
-            register={register}
-            placeholder='Enter Image URL'
-            error={errors.slug}
-          />
-          {post[0].image && <img src={getFileview(post[0].image)} alt="image"  className='m-auto w-48 h-25'  />}
+        <InputBox
+          label="Image"
+          id="image"
+          type='file'
+          register={register}
+          placeholder='Enter Image URL'
+          error={errors.slug}
+        />
+        {post[0].image && <img src={getFileview(post[0].image)} alt="image" className='m-auto w-48 h-25' />}
 
-          <SelectBox
-            label="Status"
-            id="status"
-            register={register}
-            validation={{ required: "Status is required!!" }}
-            options={[
-              { label: "Active", value: "active" },
-              { label: "Inactive", value: "inactive" }
-            ]}
-            error={errors.status}
-          />
+        <SelectBox
+          label="Status"
+          id="status"
+          register={register}
+          validation={{ required: "Status is required!!" }}
+          options={[
+            { label: "Active", value: "active" },
+            { label: "Inactive", value: "inactive" }
+          ]}
+          error={errors.status}
+        />
 
-          <Button>Update</Button>
-        </form>
+        <Button>Update</Button>
+      </form>
 
-      </FormLayout>
-    </div>
-  )
+    </FormLayout>
+  </div>
+)
 }
 
 export default EditPost

@@ -6,7 +6,7 @@ function PostCard({post,classname='w-50 h-70'}) {
     const image=getFileview(post.image)
     const len=post.title.length
   return (
-    <div className={`${classname} bg-gray-200 p-3 m-2 rounded-lg text-black`}>
+    <div className={`${classname} dark:bg-gray-300 bg-gray-800 dark:text-black text-white p-3 m-2 rounded-lg`}>
       <div className='shadow-lg p-1'>
         <Link to={`/post/${post.$id}`}>
         <img src={image} alt="img" className='w-full h-32 object-cover rounded-t-lg' />

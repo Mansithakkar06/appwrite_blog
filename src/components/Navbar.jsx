@@ -4,6 +4,10 @@ import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { logoutUser } from '../appwrite/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { logout } from '../redux/authSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSun } from '@fortawesome/free-regular-svg-icons/faSun'
+import { faMoon } from '@fortawesome/free-regular-svg-icons'
+import { toggleTheme } from '../redux/themeSlice'
 
 function Navbar() {
     const user=useSelector(state=>state.auth.user)
@@ -11,6 +15,7 @@ function Navbar() {
     const status=useSelector(state=>state.auth.status)
     const navigate=useNavigate()
     const dispatch=useDispatch()
+    const mode=useSelector(state=>state.theme.mode)
 
     const handleLogout=async(e)=>{
         e.preventDefault()
@@ -18,9 +23,12 @@ function Navbar() {
         dispatch(logout())
         navigate('/')
     }
+    const handleToggle=()=>{
+        dispatch(toggleTheme())
+    }
 
     return (
-        <header className='w-full p-3 mb-10 bg-white top-0 fixed shadow-lg shadow-black-500/50 text-black'>
+        <header className='w-full p-3 mb-10 bg-slate-200 dark:bg-gray-800 text-black dark:text-white top-0 fixed shadow-sm shadow-black-500/50'>
             <nav className='flex justify-between mx-8'>
                 <div>
                     <Link to="/"><img src={logo} alt="logo" width={50} /></Link>
@@ -56,7 +64,11 @@ function Navbar() {
                         </li>
                         </>
                         }   
+                        <li className='ps-4'>
+                            <button className='hover:cursor-pointer text-lg' onClick={handleToggle}><FontAwesomeIcon icon={mode==="light"?faSun:faMoon}/></button>
+                        </li>
                     </ul>
+                    
                 </div>
             </nav>
         </header>

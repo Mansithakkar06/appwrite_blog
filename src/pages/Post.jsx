@@ -35,12 +35,12 @@ function Post() {
   }, [id]);
   return (
     <div className='flex px-4 mx-7 py-4 gap-5'>
-      <div className=''>
+      <div className={`${otherposts.length>0 ?'w-3/4':""}`}>
         {
           user.$id === post.userid &&
           <div className='flex py-3 px-2 justify-end'>
-            <Link to={`/edit/${id}`} className='bg-green-700 px-4 py-2 rounded-lg'>Edit</Link>
-            <button onClick={() => handleDelete(id)} className='bg-red-600 px-4 py-2 rounded-lg mx-3'>Delete</button>
+            <Link to={`/edit/${id}`} className='bg-green-700 px-4 py-2 rounded-lg text-white'>Edit</Link>
+            <button onClick={() => handleDelete(id)} className='bg-red-600 px-4 py-2 rounded-lg mx-3 text-white'>Delete</button>
           </div>
         }
         <div className=''>

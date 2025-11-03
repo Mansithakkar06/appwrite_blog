@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -13,9 +13,18 @@ import Post from './pages/Post'
 import AuthLayout from './components/AuthLayout'
 import MyPosts from './pages/MyPosts'
 import EditPost from './pages/EditPost'
+import { useSelector } from 'react-redux'
 
 function App() {
-
+  const mode = useSelector(state => state.theme.mode)
+  useEffect(() => {
+    if (mode === "dark") {
+      document.documentElement.classList.add("dark")
+    }
+    else {
+      document.documentElement.classList.remove("dark")
+    }
+  }, [mode]);
   return (
     <>
       <BrowserRouter>
@@ -36,9 +45,9 @@ function App() {
             } />
             <Route path='my-posts' element={
               <AuthLayout>
-                <MyPosts/>
+                <MyPosts />
               </AuthLayout>
-            }/>
+            } />
             <Route path='*' element={<NotFound />} />
           </Route>
         </Routes>

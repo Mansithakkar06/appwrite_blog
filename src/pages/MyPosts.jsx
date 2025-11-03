@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { getCurrentUser } from '../appwrite/auth'
 import PostCard from '../components/PostCard'
 
 function MyPosts() {
@@ -10,7 +9,7 @@ function MyPosts() {
         post.userid===user.$id
     ))
     return myposts.length>0? (
-        <div className='p-3 flex'>
+        <div className='p-4 m-2 flex'>
             {
                 myposts.map((post)=>(
                     <div key={post.$id}>

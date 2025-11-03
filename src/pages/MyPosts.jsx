@@ -9,7 +9,7 @@ function MyPosts() {
     const myposts = posts.filter((post) => (
         post.userid===user.$id
     ))
-    return (
+    return myposts.length>0? (
         <div className='p-3 flex'>
             {
                 myposts.map((post)=>(
@@ -18,7 +18,11 @@ function MyPosts() {
                     </div>
                 ))
             }
-
+        </div>
+    ):
+    (
+        <div className='p-3 m-3'>
+            <h1 className='text-3xl text-center text-red-500'>No Posts Yet!!</h1>
         </div>
     )
 }
